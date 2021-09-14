@@ -1,0 +1,51 @@
+# 設定 global 全域設定
+# scrape_interval 是多久抓取一次資料
+global:
+    scrape_interval: 5s
+    evaluation_interval: 5s
+    scrape_timeout: 5s
+    external_labels:
+      monitor: 'demo-monitor'
+
+# alerting:
+#   alertmanagers:
+#   - static_configs:
+#     - targets: ['10.2.1.101:9093']
+
+# rule_files:
+#     - 'alert_rules.yml'
+    #- /etc/prometheus/alert_rules.yml
+# scrape_configs 則是抓取來源，這邊先設定我們 prometheus 本體 server 和 flask api_monitor，docker-compose 會把 service 加入 default network 所以可以用 web:5000 找到 flask app web service
+scrape_configs:
+    - job_name: 'prometheus'
+      static_configs:
+        - targets: ['54.95.197.68:9090']
+
+    - job_name: 'server_35.72.201.123_node'
+      static_configs:
+        - targets: ['172.31.25.197:9100']
+    - job_name: 'server_35.72.201.123_cadvisor'
+      static_configs:
+        - targets: ['172.31.25.197:9101']
+
+    - job_name: 'server_54.64.76.140_node'
+      static_configs:
+        - targets: ['172.31.18.71:9100']
+    - job_name: 'server_54.64.76.140_cadvisor'
+      static_configs:
+        - targets: ['172.31.18.71:9101']
+
+    - job_name: 'server_54.95.197.68_node'
+      static_configs:
+        - targets: ['54.95.197.68:9100']
+    - job_name: 'server_54.95.197.68_cadvisor'
+      static_configs:
+        - targets: ['54.95.197.68:9101']        
+
+#     - job_name: 'mysql'
+#       static_configs:
+#         - targets: ['10.2.1.101:9104']
+#    - job_name: 'api_monitor'
+#      scrape_interval: 5s
+#      static_configs:
+#        - targets: ['10.2.1.101:5000']
